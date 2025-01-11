@@ -9,7 +9,7 @@
                 <div class="flex justify-between items-center">
                     <div class="flex items-center space-x-2">
                         <!-- Logo -->
-                        <img src="https://placehold.co/40x40" alt="Coffee Shop Logo" class="h-10 w-10">
+                        <img src="{{ asset('images/logo.jpg') }}" alt="Coffee Shop Logo" class="h-10 w-10">
                         <span class="font-bold text-xl">STARBUCKS</span>
                     </div>
 
