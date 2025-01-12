@@ -21,8 +21,12 @@
                 <h1 class="text-2xl font-bold text-brown-600">Coffee Shop</h1>
             </div>
             <nav class="mt-4">
-                {{ $sidebar }}
-                
+            <div class="px-4 py-2">
+                    <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-gray-700 hover:bg-brown-100 rounded">Dashboard</a>
+                    <a href="{{ route('admin.menu') }}" class="block px-4 py-2 text-gray-700 hover:bg-brown-100 rounded">Menu Management</a>
+                    <a href="{{ route('admin.order') }}" class="block px-4 py-2 text-gray-700 hover:bg-brown-100 rounded">Orders</a>
+            
+                </div>     
                 @auth('admin')
                 <div class="px-4 py-2 mt-4">
                     <form method="POST" action="{{ route('admin.logout') }}">
@@ -40,7 +44,7 @@
         <div class="flex-1">
             <header class="bg-white shadow">
                 <div class="px-4 py-6">
-                    <h2 class="text-xl font-semibold text-gray-800">{{ $header }}</h2>
+                    <h2 class="text-xl font-semibold text-gray-800">{{ $header ?? 'Admin Dashboard' }}</h2>
                 </div>
             </header>
 

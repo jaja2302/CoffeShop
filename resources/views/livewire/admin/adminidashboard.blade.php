@@ -1,16 +1,6 @@
-<x-layouts.admin>
-    <x-slot name="title">Admin Dashboard</x-slot>
-    <x-slot name="header">Admin Control Panel</x-slot>
-
-    <x-slot name="sidebar">
-        <div class="px-4 py-2">
-            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-brown-100 rounded">Orders</a>
-            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-brown-100 rounded">Menu Management</a>
-            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-brown-100 rounded">Users</a>
-            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-brown-100 rounded">Reports</a>
-            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-brown-100 rounded">Settings</a>
-        </div>
-    </x-slot>
+<div>
+<x-slot name="title">Admin Dashboard</x-slot>
+    
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div class="bg-white p-6 rounded-lg shadow">
@@ -30,4 +20,4 @@
             <!-- Add inventory statistics -->
         </div>
     </div>
-</x-layouts.admin>
+</div>

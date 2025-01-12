@@ -24,7 +24,7 @@ class AdminAuthController extends Controller
 
         if (Auth::guard('admin')->attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended(route('admin.dashboard'));
+            return redirect()->intended(route('admin.menu'));
         }
 
         return back()->withErrors([
@@ -53,7 +53,7 @@ class AdminAuthController extends Controller
 
         Auth::guard('admin')->login($admin);
 
-        return redirect()->route('admin.dashboard');
+        return redirect()->route('admin.menu');
     }
 
     public function logout(Request $request)
