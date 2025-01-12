@@ -22,6 +22,17 @@
             </div>
             <nav class="mt-4">
                 {{ $sidebar }}
+                
+                @auth('admin')
+                <div class="px-4 py-2 mt-4">
+                    <form method="POST" action="{{ route('admin.logout') }}">
+                        @csrf
+                        <button type="submit" class="block w-full px-4 py-2 text-left text-gray-700 hover:bg-brown-100 rounded">
+                            Logout
+                        </button>
+                    </form>
+                </div>
+                @endauth
             </nav>
         </div>
 
