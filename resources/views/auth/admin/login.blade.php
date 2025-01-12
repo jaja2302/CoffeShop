@@ -1,48 +1,42 @@
-<x-layouts.admin>
-    <x-slot name="title">Admin Login</x-slot>
-    <x-slot name="header">Admin Login</x-slot>
-    
-    <x-slot name="sidebar">
-        <!-- Empty sidebar for login page -->
-    </x-slot>
+<x-layouts.guest>
+    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
+        <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+            <h2 class="text-2xl font-bold text-center mb-6">Admin Login</h2>
 
-    <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-        <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-            <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Admin Login</h2>
-        </div>
-
-        <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form class="space-y-6" action="{{ route('admin.login') }}" method="POST">
+            <form method="POST" action="{{ route('admin.login') }}">
                 @csrf
-                <div>
-                    <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
-                    <div class="mt-2">
-                        <input id="email" name="email" type="email" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brown-600 sm:text-sm sm:leading-6">
-                    </div>
+
+                <!-- Email Address -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
+                        Email
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('email') border-red-500 @enderror"
+                        id="email" type="email" name="email" value="{{ old('email') }}" required autofocus />
                     @error('email')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <div>
-                    <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
-                    <div class="mt-2">
-                        <input id="password" name="password" type="password" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brown-600 sm:text-sm sm:leading-6">
-                    </div>
+                <!-- Password -->
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
+                        Password
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline @error('password') border-red-500 @enderror"
+                        id="password" type="password" name="password" required />
                     @error('password')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <div>
-                    <button type="submit" class="flex w-full justify-center rounded-md bg-brown-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-brown-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brown-600">Sign in</button>
+                <div class="flex items-center justify-between">
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        type="submit">
+                        Sign In
+                    </button>
                 </div>
             </form>
-
-            <p class="mt-10 text-center text-sm text-gray-500">
-                Not an admin?
-                <a href="{{ route('admin.register') }}" class="font-semibold leading-6 text-brown-600 hover:text-brown-500">Register here</a>
-            </p>
         </div>
     </div>
-</x-layouts.admin> 
+</x-layouts.guest> 
