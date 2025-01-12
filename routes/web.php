@@ -12,6 +12,8 @@ Route::get('/', [DashboardguestController::class, 'index'])->name('dashboard.gue
 Route::middleware('guest:admin')->group(function () {
     Route::get('admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
     Route::post('admin/login', [AdminAuthController::class, 'login']);
+    Route::get('admin/register', [AdminAuthController::class, 'showRegistrationForm'])->name('admin.register');
+    Route::post('admin/register', [AdminAuthController::class, 'register']);
 });
 
 // Admin protected routes
