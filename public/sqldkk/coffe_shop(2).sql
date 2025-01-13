@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Waktu pembuatan: 12 Jan 2025 pada 15.05
+-- Waktu pembuatan: 13 Jan 2025 pada 14.41
 -- Versi server: 8.0.30
 -- Versi PHP: 8.3.15
 
@@ -36,15 +36,6 @@ CREATE TABLE `admins` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data untuk tabel `admins`
---
-
-INSERT INTO `admins` (`id`, `name`, `email`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(2, 'elsa', 'elsacantik@gmail.com', '$2y$12$c4wfDZ2lPVENWJ9tqbV9pe9qZqkZ6qdh1gTMtRfCUB./95TkzYVhe', NULL, '2025-01-11 21:58:02', '2025-01-11 21:58:02'),
-(3, 'jaja', 'jajavale@gmail.com', '$2y$12$ZP8oa1bq/PGVOs3jcusVAOR7s/AC7XNkvFcaXGUXgKWFwEL3wRBTa', NULL, '2025-01-11 22:52:51', '2025-01-11 22:52:51'),
-(4, 'elsacantik', 'elelel@gmail.com', '$2y$12$Uqm2XPM9Uh/0PqCUy2Kp6O51OcMzw90EUd5rA5F9HO6lta0bxhCfW', NULL, '2025-01-12 07:59:46', '2025-01-12 07:59:46');
 
 -- --------------------------------------------------------
 
@@ -90,15 +81,6 @@ CREATE TABLE `categories` (
   `created_at` timestamp NOT NULL,
   `updated_at` timestamp NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data untuk tabel `categories`
---
-
-INSERT INTO `categories` (`id`, `name`, `created_at`, `updated_at`) VALUES
-(1, 'Donat', '2025-01-12 07:53:48', '2025-01-12 07:53:48'),
-(2, 'Minuman', '2025-01-12 07:54:04', '2025-01-12 07:54:04'),
-(3, 'Makanan', '2025-01-12 07:54:12', '2025-01-12 07:54:12');
 
 -- --------------------------------------------------------
 
@@ -165,17 +147,10 @@ CREATE TABLE `menu_items` (
   `price` int NOT NULL,
   `created_at` timestamp NOT NULL,
   `updated_at` timestamp NOT NULL,
-  `image` tinytext COLLATE utf8mb4_general_ci NOT NULL
+  `image` tinytext COLLATE utf8mb4_general_ci NOT NULL,
+  `rating` decimal(10,0) NOT NULL,
+  `featured` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data untuk tabel `menu_items`
---
-
-INSERT INTO `menu_items` (`id`, `name`, `description`, `category_id`, `price`, `created_at`, `updated_at`, `image`) VALUES
-(1, 'estrik mak erot', 'Aw', 2, 25000, '2025-01-12 08:01:55', '2025-01-12 08:01:55', 'menu-items/01JHDGJAV1Y0S4RDA6FGS10YBJ.png'),
-(2, 'Nasi Kepal ', 'Makan yah', 3, 15000, '2025-01-12 08:02:49', '2025-01-12 08:02:49', 'menu-items/01JHDGM02W6XJZQV3RC8M8YMXZ.png'),
-(3, 'ujji', 'mii', 2, 999, '2025-01-12 08:03:56', '2025-01-12 08:03:56', 'menu-items/01JHDGP1J1FAZ0D56BD2R084HC.png');
 
 -- --------------------------------------------------------
 
@@ -205,13 +180,15 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `orders`
+-- Struktur dari tabel `orderitems`
 --
 
-CREATE TABLE `orders` (
+CREATE TABLE `orderitems` (
   `id` int NOT NULL,
-  `item_id` int NOT NULL,
-  `user_id` int NOT NULL
+  `items` json NOT NULL,
+  `user_id` int NOT NULL,
+  `created_at` timestamp NOT NULL,
+  `updated_at` timestamp NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -265,9 +242,8 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('0HP9UpZvW3coWG74Wylkj2z1twCfqFMyNWTT5vVo', 2, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:134.0) Gecko/20100101 Firefox/134.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiZktsUGdGazM3eEFBMnZYMURtb05PN3VBZU9LSEt2QTA1a053UjhyNiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzI6Imh0dHA6Ly9jb2ZmZXNob3AudGVzdC9hZG1pbi9tZW51Ijt9czo1MjoibG9naW5fYWRtaW5fNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToyO30=', 1736693871),
-('FJnSCXeBNBIKT1wcJx5fx6DJs6lUyiZkbb4GN7QR', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:134.0) Gecko/20100101 Firefox/134.0', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiYUJTWEtlR2s2dVQ4dUx4a0NjVU94WTBsTjJ1UnhVbml6N1pkWTJ1dCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzY6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pbi9yZWdpc3RlciI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1736694077),
-('T4y1lgrJjbq5RAqigyR8PFVUfihKYUjsX8QzzNlD', 4, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:134.0) Gecko/20100101 Firefox/134.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiOTVVRGc0OGhYck1xakdYcUVxVnJNSFNEV21LaVNvbFR0em9rZFVuQiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzI6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pbi9tZW51Ijt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MjoibG9naW5fYWRtaW5fNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aTo0O30=', 1736694237);
+('3UCCclhBEVyynlWdlJbQpv4tNAuEPcMElj8Lu03d', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:134.0) Gecko/20100101 Firefox/134.0', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiZk9NaVVtRUhyRU5IbkZCZWRUbnBhSEJJUWZ5SE1oN2xKQ2NHOWNVTCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly9jb2ZmZXNob3AudGVzdC9sb2dpbiI7fX0=', 1736779230),
+('r1EPf1JZQk9MsoOlrBm89xYa59SGpXgC5qnOBGY3', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:134.0) Gecko/20100101 Firefox/134.0', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiNFlSd2tHd2s1QUNERHc2NmRybDB3WDZsVzJ3TFFjR1Z2dDd6Ymp1ciI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly9jb2ZmZXNob3AudGVzdCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1736772890);
 
 -- --------------------------------------------------------
 
@@ -366,9 +342,9 @@ ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `orders`
+-- Indeks untuk tabel `orderitems`
 --
-ALTER TABLE `orders`
+ALTER TABLE `orderitems`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -414,13 +390,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT untuk tabel `admins`
 --
 ALTER TABLE `admins`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `failed_jobs`
@@ -438,7 +414,7 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT untuk tabel `menu_items`
 --
 ALTER TABLE `menu_items`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `migrations`
@@ -447,10 +423,10 @@ ALTER TABLE `migrations`
   MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT untuk tabel `orders`
+-- AUTO_INCREMENT untuk tabel `orderitems`
 --
-ALTER TABLE `orders`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+ALTER TABLE `orderitems`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT untuk tabel `personal_access_tokens`
