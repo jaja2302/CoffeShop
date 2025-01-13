@@ -2,15 +2,15 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dashboard\DashboardadminController;
-use App\Http\Controllers\Dashboard\DashboardguestController;
 use App\Http\Controllers\Auth\AdminAuthController;
 use App\Livewire\Admin\Adminidashboard;
 use App\Livewire\Admin\AdminMenumanagement;
 use App\Livewire\Admin\AdminOrders;
+use App\Livewire\User\UserDashboard;
+use App\Livewire\User\Checkout;
 
-// Guest routes
-Route::get('/', [DashboardguestController::class, 'index'])->name('dashboard.guest');
 
+Route::get('/', UserDashboard::class)->name('dashboard.user');
 // Admin auth routes
 Route::middleware('guest:admin')->group(function () {
     Route::get('admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
