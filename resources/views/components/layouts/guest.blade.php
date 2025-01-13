@@ -18,7 +18,40 @@
 </head>
 
 <body class="antialiased">
-    {{ $slot }}
+    <!-- Fixed Navigation Bar -->
+    <nav class="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md shadow-sm z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-2">
+                    <!-- Logo -->
+                    <img src="{{ asset('images/logo.jpg') }}" alt="Coffee Shop Logo" class="h-10 w-10">
+                    <span class="font-bold text-xl">STARBUCKS</span>
+                </div>
+
+                <div class="flex space-x-8">
+                    <a href="#" class="text-gray-700 hover:text-gray-900">Trending</a>
+                    <a href="#" class="text-gray-700 hover:text-gray-900">Rewards</a>
+                    <a href="#" class="text-gray-700 hover:text-gray-900">Gift Cards</a>
+                    <a href="#" class="text-gray-700 hover:text-gray-900">Reserve</a>
+                    <a href="#" class="text-gray-700 hover:text-gray-900">Delivery</a>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <input type="text" placeholder="Search" class="w-64 px-4 py-2 rounded-full bg-white focus:outline-none border border-gray-200">
+                        <svg class="w-5 h-5 absolute right-3 top-2.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content with top padding to account for fixed navbar -->
+    <div class="pt-16">
+        {{ $slot }}
+    </div>
 
     <!-- Footer -->
     <footer class="bg-white">

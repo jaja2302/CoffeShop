@@ -3,47 +3,19 @@
 
     <!-- Main content -->
     <div class="w-full min-h-screen bg-[#f3ebe3]">
-        <!-- Navigation Bar -->
-        <nav class="bg-transparent py-4">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center">
-                    <div class="flex items-center space-x-2">
-                        <!-- Logo -->
-                        <img src="{{ asset('images/logo.jpg') }}" alt="Coffee Shop Logo" class="h-10 w-10">
-                        <span class="font-bold text-xl">STARBUCKS</span>
-                    </div>
-
-                    <div class="flex space-x-8">
-                        <a href="#" class="text-gray-700 hover:text-gray-900">Trending</a>
-                        <a href="#" class="text-gray-700 hover:text-gray-900">Rewards</a>
-                        <a href="#" class="text-gray-700 hover:text-gray-900">Gift Cards</a>
-                        <a href="#" class="text-gray-700 hover:text-gray-900">Reserve</a>
-                        <a href="#" class="text-gray-700 hover:text-gray-900">Delivery</a>
-                    </div>
-
-                    <div class="flex items-center space-x-4">
-                        <div class="relative">
-                            <input type="text" placeholder="Search" class="w-64 px-4 py-2 rounded-full bg-white focus:outline-none">
-                            <svg class="w-5 h-5 absolute right-3 top-2.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                        </div>
-                        <div class="relative">
-                            <button wire:click="toggleCart" class="p-2">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                                </svg>
-                                @if($cartCount > 0)
-                                    <span class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                                        {{ $cartCount }}
-                                    </span>
-                                @endif
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </nav>
+        <!-- Cart Button (Floating) -->
+        <div class="fixed bottom-8 right-8 z-[60]">
+            <button wire:click="toggleCart" class="bg-black text-white p-4 rounded-full shadow-lg hover:bg-gray-800 transition-all">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+                @if(session()->has('cart') && count(session('cart')) > 0)
+                    <span class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">
+                        {{ count(session('cart')) }}
+                    </span>
+                @endif
+            </button>
+        </div>
 
         <!-- Floating Category Navigation -->
         <div class="fixed right-8 top-1/2 -translate-y-1/2 space-y-4 z-50">
@@ -161,51 +133,77 @@
 
         <!-- Cart Modal -->
         @if($showCartModal)
-        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity z-50">
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity z-[70]">
             <div class="fixed inset-0 overflow-hidden">
                 <div class="absolute inset-0 overflow-hidden">
                     <div class="fixed inset-y-0 right-0 pl-10 max-w-full flex">
                         <div class="w-screen max-w-md">
                             <div class="h-full flex flex-col bg-white shadow-xl">
-                                <div class="flex-1 py-6 overflow-y-auto px-4 sm:px-6">
-                                    <div class="flex items-start justify-between">
-                                        <h2 class="text-lg font-medium text-gray-900">Shopping Cart</h2>
-                                        <button wire:click="toggleCart" class="text-gray-400 hover:text-gray-500">
-                                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                            </svg>
-                                        </button>
-                                    </div>
+                                <!-- Header -->
+                                <div class="flex items-start justify-between p-4 border-b border-gray-200">
+                                    <h2 class="text-lg font-medium text-gray-900">Shopping Cart</h2>
+                                    <button wire:click="toggleCart" class="text-gray-400 hover:text-gray-500">
+                                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
 
-                                    <div class="mt-8">
-                                        @if(count($cartItems) > 0)
-                                            <div class="flow-root">
-                                                <ul role="list" class="-my-6 divide-y divide-gray-200">
-                                                    @foreach($cartItems as $id => $item)
-                                                        <li class="py-6 flex">
-                                                            <div class="flex-1 ml-4">
-                                                                <div class="flex justify-between">
-                                                                    <div>
-                                                                        <h3 class="text-base font-medium text-gray-900">
-                                                                            {{ $item['name'] }}
-                                                                        </h3>
-                                                                        <p class="mt-1 text-sm text-gray-500">
-                                                                            Qty: {{ $item['quantity'] }}
-                                                                        </p>
-                                                                    </div>
-                                                                    <p class="text-base font-medium text-gray-900">
-                                                                        Rp {{ number_format($item['price'], 0, ',', '.') }}
+                                <!-- Cart Items -->
+                                <div class="flex-1 overflow-y-auto p-4">
+                                    @if(count($cartItems) > 0)
+                                        <div class="flow-root">
+                                            <ul role="list" class="-my-6 divide-y divide-gray-200">
+                                                @foreach($cartItems as $id => $item)
+                                                    <li class="py-6 flex">
+                                                        <div class="flex-1 ml-4">
+                                                            <div class="flex justify-between">
+                                                                <div>
+                                                                    <h3 class="text-base font-medium text-gray-900">
+                                                                        {{ $item['name'] }}
+                                                                    </h3>
+                                                                    <p class="mt-1 text-sm text-gray-500">
+                                                                        Qty: {{ $item['quantity'] }}
                                                                     </p>
                                                                 </div>
+                                                                <p class="text-base font-medium text-gray-900">
+                                                                    Rp {{ number_format($item['price'], 0, ',', '.') }}
+                                                                </p>
                                                             </div>
-                                                        </li>
-                                                    @endforeach
-                                                </ul>
-                                            </div>
-                                        @else
-                                            <p class="text-gray-500 text-center py-8">Your cart is empty</p>
-                                        @endif
-                                    </div>
+                                                        </div>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    @else
+                                        <p class="text-gray-500 text-center py-8">Your cart is empty</p>
+                                    @endif
+                                </div>
+
+                                <!-- Footer with Total and Buttons -->
+                                <div class="border-t border-gray-200 p-4">
+                                    @if(count($cartItems) > 0)
+                                        <div class="flex justify-between text-base font-medium text-gray-900 mb-4">
+                                            <p>Total</p>
+                                            <p>Rp {{ number_format(collect($cartItems)->sum(function($item) {
+                                                return $item['price'] * $item['quantity'];
+                                            }), 0, ',', '.') }}</p>
+                                        </div>
+                                        <div class="flex space-x-4">
+                                            <button
+                                                wire:click="clearCart"
+                                                class="flex-1 px-6 py-3 border border-transparent text-base font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200"
+                                            >
+                                                Clear Cart
+                                            </button>
+                                            <button
+                                                wire:click="checkout"
+                                                class="flex-1 px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-black hover:bg-gray-800"
+                                            >
+                                                Checkout
+                                            </button>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
