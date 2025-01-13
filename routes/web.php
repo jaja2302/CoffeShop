@@ -8,6 +8,9 @@ use App\Livewire\Admin\AdminMenumanagement;
 use App\Livewire\Admin\AdminOrders;
 use App\Livewire\User\UserDashboard;
 use App\Livewire\User\Checkout;
+use App\Livewire\Auth\Login;
+use App\Livewire\Auth\Register;
+use App\Http\Controllers\Auth\UserAuthController;
 
 
 Route::get('/', UserDashboard::class)->name('dashboard.user');
@@ -25,5 +28,17 @@ Route::middleware('auth:admin')->group(function () {
     Route::post('admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
     Route::get('admin/menu', AdminMenumanagement::class)->name('admin.menu');
     Route::get('admin/order', AdminOrders::class)->name('admin.order');
+});
+
+Route::middleware('guest')->group(function () {
+    Route::get('login', [UserAuthController::class, 'showLoginForm'])->name('login');
+    Route::post('login', [UserAuthController::class, 'login']);
+    Route::get('register', [UserAuthController::class, 'showRegistrationForm'])->name('register');
+    Route::post('register', [UserAuthController::class, 'register']);
+});
+
+Route::middleware('auth')->group(function () {
+    Route::post('logout', [UserAuthController::class, 'logout'])->name('logout');
+    Route::get('/checkout', Checkout::class)->name('checkout');
 });
 

@@ -6,6 +6,7 @@ use App\Models\Menu;
 use App\Models\Category;
 use Livewire\Component;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Auth;
 
 class UserDashboard extends Component
 {
@@ -30,9 +31,13 @@ class UserDashboard extends Component
         return count(session('cart', []));
     }
 
-    public function toggleCart()
+    public function toggleCart($show = null)
     {
-        $this->showCartModal = !$this->showCartModal;
+        if ($show !== null) {
+            $this->showCartModal = $show;
+        } else {
+            $this->showCartModal = !$this->showCartModal;
+        }
     }
 
     public function addToCart($menuId)
@@ -80,10 +85,54 @@ class UserDashboard extends Component
             return;
         }
 
-        Notification::make()
-            ->title('Proceeding to checkout')
-            ->success()
-            ->send();
+        // Check if user is logged in
+        if (!Auth::check()) {
+            // Store cart in session for after login
+            session()->put('checkout_pending', true);
+            
+            Notification::make()
+                ->title('Please login or register to continue checkout')
+                ->warning()
+                ->actions([
+                    \Filament\Notifications\Actions\Action::make('login')
+                        ->button()
+                        ->url(route('login')),
+                    \Filament\Notifications\Actions\Action::make('register')
+                        ->button()
+                        ->url(route('register')),
+                ])
+                ->persistent()
+                ->send();
+
+            // Explicitly close cart modal
+            $this->toggleCart(false);
+            return;
+        }
+
+        // Jika user sudah login, lanjutkan ke proses checkout
+        $this->proceedToCheckout();
+    }
+
+    protected function proceedToCheckout()
+    {
+        try {
+            Notification::make()
+                ->title('Proceeding to checkout')
+                ->success()
+                ->send();
+            
+            // Menggunakan redirect() helper dengan parameter absolute true
+            return redirect()->route('checkout');
+            
+            // Atau alternatif lain jika di atas tidak berhasil:
+            // return $this->redirectRoute('checkout');
+        } catch (\Exception $e) {
+            $this->toggleCart(false);
+            Notification::make()
+                ->title('Error during checkout')
+                ->danger()
+                ->send();
+        }
     }
 
     public function render()

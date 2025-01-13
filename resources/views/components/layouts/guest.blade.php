@@ -43,6 +43,24 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </div>
+
+                    <!-- Auth Buttons -->
+                    @auth
+                        <form method="POST" action="{{ route('logout') }}" class="flex items-center">
+                            @csrf
+                            <span class="text-gray-700 mr-4">{{ Auth::user()->name }}</span>
+                            <button type="submit" class="text-gray-700 hover:text-gray-900 font-medium">
+                                Logout
+                            </button>
+                        </form>
+                    @else
+                        <div class="flex items-center space-x-4">
+                            <a href="{{ route('login') }}" class="text-gray-700 hover:text-gray-900">Login</a>
+                            <a href="{{ route('register') }}" class="bg-brown-600 text-white px-4 py-2 rounded-full hover:bg-brown-700 transition">
+                                Register
+                            </a>
+                        </div>
+                    @endauth
                 </div>
             </div>
         </div>
