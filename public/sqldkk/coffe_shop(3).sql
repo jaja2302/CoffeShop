@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Waktu pembuatan: 13 Jan 2025 pada 14.41
+-- Waktu pembuatan: 14 Jan 2025 pada 14.16
 -- Versi server: 8.0.30
 -- Versi PHP: 8.3.15
 
@@ -54,8 +54,8 @@ CREATE TABLE `cache` (
 --
 
 INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('5c785c036466adea360111aa28563bfd556b5fba', 'i:1;', 1736694292),
-('5c785c036466adea360111aa28563bfd556b5fba:timer', 'i:1736694292;', 1736694292);
+('5c785c036466adea360111aa28563bfd556b5fba', 'i:2;', 1736858756),
+('5c785c036466adea360111aa28563bfd556b5fba:timer', 'i:1736858756;', 1736858756);
 
 -- --------------------------------------------------------
 
@@ -81,6 +81,15 @@ CREATE TABLE `categories` (
   `created_at` timestamp NOT NULL,
   `updated_at` timestamp NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `categories`
+--
+
+INSERT INTO `categories` (`id`, `name`, `created_at`, `updated_at`) VALUES
+(1, 'Makanan', '2025-01-14 05:37:01', '2025-01-14 05:37:01'),
+(2, 'Minuman', '2025-01-14 05:37:07', '2025-01-14 05:37:07'),
+(3, 'Kue', '2025-01-14 05:37:18', '2025-01-14 05:37:18');
 
 -- --------------------------------------------------------
 
@@ -148,8 +157,8 @@ CREATE TABLE `menu_items` (
   `created_at` timestamp NOT NULL,
   `updated_at` timestamp NOT NULL,
   `image` tinytext COLLATE utf8mb4_general_ci NOT NULL,
-  `rating` decimal(10,0) NOT NULL,
-  `featured` tinyint(1) NOT NULL
+  `rating` decimal(10,0) NOT NULL DEFAULT '5',
+  `featured` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -242,8 +251,13 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('3UCCclhBEVyynlWdlJbQpv4tNAuEPcMElj8Lu03d', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:134.0) Gecko/20100101 Firefox/134.0', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiZk9NaVVtRUhyRU5IbkZCZWRUbnBhSEJJUWZ5SE1oN2xKQ2NHOWNVTCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly9jb2ZmZXNob3AudGVzdC9sb2dpbiI7fX0=', 1736779230),
-('r1EPf1JZQk9MsoOlrBm89xYa59SGpXgC5qnOBGY3', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:134.0) Gecko/20100101 Firefox/134.0', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiNFlSd2tHd2s1QUNERHc2NmRybDB3WDZsVzJ3TFFjR1Z2dDd6Ymp1ciI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly9jb2ZmZXNob3AudGVzdCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1736772890);
+('0P2iayQQK1yow7NtumHMaruFARkc078uZajJfJD6', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:134.0) Gecko/20100101 Firefox/134.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiaHg1THloNU5WS3ZlTjBJZWdjY2NmaHk1bnFac215VGRxMTJmdVZiOSI7czo0OiJjYXJ0IjthOjA6e31zOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czoyMToiaHR0cDovL2NvZmZlc2hvcC50ZXN0Ijt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1736863146),
+('1hn9WxJbposK2vGQ3ar8wKpyMoc7xY72BwuMH034', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:134.0) Gecko/20100101 Firefox/134.0', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiTE1YSTdnVUU4UUkyQ2FuT3JScllFSHhYblV4QkkxdkI5WEV6TzZLOSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzM6Imh0dHA6Ly9jb2ZmZXNob3AudGVzdC9hZG1pbi9sb2dpbiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1736861514),
+('j6kCPqeH05ipPPIzh6XWvstsMgjeWn93fCl9bTwD', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:134.0) Gecko/20100101 Firefox/134.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiRHExMkhsRXl0SjhpZHdLeUZLOFlaVnBHNFNUWEJuVEM1NEdQTDdaUSI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czozMzoiaHR0cDovL2NvZmZlc2hvcC50ZXN0L2FkbWluL29yZGVyIjt9czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzM6Imh0dHA6Ly9jb2ZmZXNob3AudGVzdC9hZG1pbi9vcmRlciI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1736861856),
+('MDbnzZchtvSiZcHODbvl9kOUVJsbmv9TxsM226K9', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:134.0) Gecko/20100101 Firefox/134.0', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiOXRZMVFtbEVsU0l1djBYOUZVSDRLVEMxNk1FM3JtdmxHdXJWOU5XUyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzM6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pbi9sb2dpbiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1736859083),
+('O6fHHul7LEvSqlgtKQHtPinOYFWwF9SqXwuJOJu7', 3, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:134.0) Gecko/20100101 Firefox/134.0', 'YTo2OntzOjY6Il90b2tlbiI7czo0MDoid0dJTUQ0MUNsamtJOFU0cko1UURQVzFzd0pVRmFTWXRodnNxTWY5WSI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMCI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjM7czo4OiJmaWxhbWVudCI7YTowOnt9czo0OiJjYXJ0IjthOjA6e319', 1736859978),
+('OY0FDvO3yPUVvKtsV5KqPFplyz211Ada5QcZaKK6', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:134.0) Gecko/20100101 Firefox/134.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiaDVnT2dFbXJlVmFlT1poVTNkaVdIZmpkREtxNnRjdEFWZkg5b0Y5diI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czozMjoiaHR0cDovL2NvZmZlc2hvcC50ZXN0L2FkbWluL21lbnUiO31zOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czozMjoiaHR0cDovL2NvZmZlc2hvcC50ZXN0L2FkbWluL21lbnUiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1736861513),
+('q7baEBECC5JWmdVN7oFxIyO3PI3wO3YBY3MUrzuW', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:134.0) Gecko/20100101 Firefox/134.0', 'YTo2OntzOjY6Il90b2tlbiI7czo0MDoiNlZjWHAySTduZjNaS2FVNkJNVTVMVko0a25BaDhVNzl1MVdaZE43WSI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly9jb2ZmZXNob3AudGVzdCI7fXM6NDoiY2FydCI7YTowOnt9czo4OiJmaWxhbWVudCI7YTowOnt9czoxNjoiY2hlY2tvdXRfcGVuZGluZyI7YjoxO30=', 1736863726);
 
 -- --------------------------------------------------------
 
@@ -396,7 +410,7 @@ ALTER TABLE `admins`
 -- AUTO_INCREMENT untuk tabel `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT untuk tabel `failed_jobs`
@@ -426,7 +440,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT untuk tabel `orderitems`
 --
 ALTER TABLE `orderitems`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `personal_access_tokens`

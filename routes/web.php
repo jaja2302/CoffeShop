@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dashboard\DashboardadminController;
-// use App\Http\Controllers\Auth\AdminAuthController;
+use App\Http\Controllers\Auth\AdminAuthController;
 use App\Livewire\Admin\Adminidashboard;
 use App\Livewire\Admin\AdminMenumanagement;
 use App\Livewire\Admin\AdminOrders;

@@ -7,61 +7,84 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>{{ config('app.name') }} - {{ $title ?? 'Welcome' }}</title>
+    <title>{{ config('app.name') }} - {{ $title ?? 'Selamat Datang' }}</title>
 
     <!-- Add Font Awesome for social icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 
-    @filamentStyles
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @filamentStyles
     @livewireStyles
 </head>
 
 <body class="antialiased">
-    <!-- Fixed Navigation Bar -->
-    <nav class="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md shadow-sm z-50">
+    <!-- Navigation -->
+    <nav x-data="{ mobileMenuOpen: false }" class="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md shadow-sm z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
                 <div class="flex items-center space-x-2">
-                    <!-- Logo -->
                     <img src="{{ asset('images/logo.jpg') }}" alt="Coffee Shop Logo" class="h-10 w-10">
-                    <span class="font-bold text-xl">STARBUCKS</span>
+                    <span class="font-bold text-xl">KEDAI KOPI</span>
                 </div>
 
-                <div class="flex space-x-8">
-                    <a href="#" class="text-gray-700 hover:text-gray-900">Trending</a>
-                    <a href="#" class="text-gray-700 hover:text-gray-900">Rewards</a>
-                    <a href="#" class="text-gray-700 hover:text-gray-900">Gift Cards</a>
-                    <a href="#" class="text-gray-700 hover:text-gray-900">Reserve</a>
-                    <a href="#" class="text-gray-700 hover:text-gray-900">Delivery</a>
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="/" class="text-gray-700 hover:text-brown-600 transition">Beranda</a>
+                    <a href="#featured" class="text-gray-700 hover:text-brown-600 transition">Unggulan</a>
+                    <a href="#categories" class="text-gray-700 hover:text-brown-600 transition">Kategori</a>
+                    <a href="#contact" class="text-gray-700 hover:text-brown-600 transition">Kontak</a>
                 </div>
 
-                <div class="flex items-center space-x-4">
-                    <div class="relative">
-                        <input type="text" placeholder="Search" class="w-64 px-4 py-2 rounded-full bg-white focus:outline-none border border-gray-200">
-                        <svg class="w-5 h-5 absolute right-3 top-2.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-gray-500 hover:text-gray-700">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            <path x-show="mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
-                    </div>
+                    </button>
+                </div>
 
-                    <!-- Auth Buttons -->
+                <!-- Auth Buttons -->
+                <div class="hidden md:flex items-center space-x-4">
                     @auth
-                        <form method="POST" action="{{ route('logout') }}" class="flex items-center">
+                        <span class="text-gray-700">{{ Auth::user()->name }}</span>
+                        <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <span class="text-gray-700 mr-4">{{ Auth::user()->name }}</span>
-                            <button type="submit" class="text-gray-700 hover:text-gray-900 font-medium">
-                                Logout
-                            </button>
+                            <button type="submit" class="text-gray-700 hover:text-brown-600 transition">Keluar</button>
                         </form>
                     @else
-                        <div class="flex items-center space-x-4">
-                            <a href="{{ route('login') }}" class="text-gray-700 hover:text-gray-900">Login</a>
-                            <a href="{{ route('register') }}" class="bg-brown-600 text-white px-4 py-2 rounded-full hover:bg-brown-700 transition">
-                                Register
-                            </a>
-                        </div>
+                        <a href="{{ route('login') }}" class="text-gray-700 hover:text-brown-600 transition">Masuk</a>
+                        <a href="{{ route('register') }}" class="bg-brown-600 text-white px-4 py-2 rounded-full hover:bg-brown-700 transition">
+                            Daftar
+                        </a>
                     @endauth
                 </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div x-show="mobileMenuOpen" 
+             x-transition:enter="transition ease-out duration-200"
+             x-transition:enter-start="opacity-0 transform -translate-y-2"
+             x-transition:enter-end="opacity-100 transform translate-y-0"
+             x-transition:leave="transition ease-in duration-150"
+             x-transition:leave-start="opacity-100 transform translate-y-0"
+             x-transition:leave-end="opacity-0 transform -translate-y-2"
+             class="md:hidden bg-white shadow-lg">
+            <div class="px-4 pt-2 pb-3 space-y-1">
+                <a href="/" class="block px-3 py-2 text-gray-700 hover:bg-brown-50 rounded-md">Beranda</a>
+                <a href="#featured" class="block px-3 py-2 text-gray-700 hover:bg-brown-50 rounded-md">Unggulan</a>
+                <a href="#categories" class="block px-3 py-2 text-gray-700 hover:bg-brown-50 rounded-md">Kategori</a>
+                <a href="#contact" class="block px-3 py-2 text-gray-700 hover:bg-brown-50 rounded-md">Kontak</a>
+                
+                @guest
+                    <div class="mt-4 pt-4 border-t border-gray-200">
+                        <a href="{{ route('login') }}" class="block px-3 py-2 text-gray-700 hover:bg-brown-50 rounded-md">Masuk</a>
+                        <a href="{{ route('register') }}" class="block px-3 py-2 text-gray-700 hover:bg-brown-50 rounded-md">Daftar</a>
+                    </div>
+                @endguest
             </div>
         </div>
     </nav>
@@ -78,12 +101,12 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <!-- Location & Contact -->
                 <div>
-                    <h3 class="text-lg font-semibold mb-4">Visit Us</h3>
+                    <h3 class="text-lg font-semibold mb-4">Kunjungi Kami</h3>
                     <div class="space-y-3">
-                        <p class="text-gray-600">123 Coffee Street</p>
+                        <p class="text-gray-600">Jalan Kopi 123</p>
                         <p class="text-gray-600">Jakarta, Indonesia 12345</p>
-                        <p class="text-gray-600">Phone: (123) 456-7890</p>
-                        <p class="text-gray-600">Email: info@coffeeshop.com</p>
+                        <p class="text-gray-600">Telepon: (123) 456-7890</p>
+                        <p class="text-gray-600">Email: info@kedaikopi.com</p>
                     </div>
                     <!-- Map -->
                     <div class="mt-4 h-48 bg-gray-200 rounded-lg overflow-hidden">
@@ -100,49 +123,49 @@
 
                 <!-- Opening Hours -->
                 <div>
-                    <h3 class="text-lg font-semibold mb-4">Opening Hours</h3>
+                    <h3 class="text-lg font-semibold mb-4">Jam Operasional</h3>
                     <div class="space-y-2">
-                        <p class="text-gray-600">Monday - Friday</p>
-                        <p class="font-medium">7:00 AM - 10:00 PM</p>
-                        <p class="text-gray-600 mt-4">Saturday - Sunday</p>
-                        <p class="font-medium">8:00 AM - 11:00 PM</p>
-                        <p class="text-gray-600 mt-4">Holidays</p>
-                        <p class="font-medium">9:00 AM - 9:00 PM</p>
+                        <p class="text-gray-600">Senin - Jumat</p>
+                        <p class="font-medium">07:00 - 22:00</p>
+                        <p class="text-gray-600 mt-4">Sabtu - Minggu</p>
+                        <p class="font-medium">08:00 - 23:00</p>
+                        <p class="text-gray-600 mt-4">Hari Libur</p>
+                        <p class="font-medium">09:00 - 21:00</p>
                     </div>
                 </div>
 
                 <!-- Quick Links -->
                 <div>
-                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <h3 class="text-lg font-semibold mb-4">Tautan Cepat</h3>
                     <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-600 hover:text-gray-900">About Us</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-gray-900">Tentang Kami</a></li>
                         <li><a href="#" class="text-gray-600 hover:text-gray-900">Menu</a></li>
-                        <li><a href="#" class="text-gray-600 hover:text-gray-900">Rewards Program</a></li>
-                        <li><a href="#" class="text-gray-600 hover:text-gray-900">Gift Cards</a></li>
-                        <li><a href="#" class="text-gray-600 hover:text-gray-900">Careers</a></li>
-                        <li><a href="#" class="text-gray-600 hover:text-gray-900">Contact Us</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-gray-900">Program Rewards</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-gray-900">Kartu Hadiah</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-gray-900">Karir</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-gray-900">Hubungi Kami</a></li>
                     </ul>
                 </div>
 
                 <!-- Newsletter & Social -->
                 <div>
-                    <h3 class="text-lg font-semibold mb-4">Stay Connected</h3>
+                    <h3 class="text-lg font-semibold mb-4">Tetap Terhubung</h3>
                     <div class="mb-6">
-                        <p class="text-gray-600 mb-2">Subscribe to our newsletter</p>
+                        <p class="text-gray-600 mb-2">Berlangganan newsletter kami</p>
                         <form class="flex gap-2">
                             <input
                                 type="email"
-                                placeholder="Enter your email"
+                                placeholder="Masukkan email Anda"
                                 class="px-4 py-2 border rounded-lg flex-1 focus:outline-none focus:ring-2 focus:ring-brown-400">
                             <button
                                 type="submit"
                                 class="px-4 py-2 bg-brown-600 text-white rounded-lg hover:bg-brown-700 transition">
-                                Subscribe
+                                Langganan
                             </button>
                         </form>
                     </div>
                     <div>
-                        <p class="text-gray-600 mb-2">Follow us</p>
+                        <p class="text-gray-600 mb-2">Ikuti kami</p>
                         <div class="flex space-x-4">
                             <a href="#" class="text-gray-600 hover:text-blue-600">
                                 <i class="fab fa-facebook-f text-xl"></i>
@@ -165,12 +188,12 @@
             <div class="mt-12 pt-8 border-t border-gray-200">
                 <div class="flex flex-col md:flex-row justify-between items-center">
                     <div class="text-gray-500 text-sm">
-                        © 2024 Coffee Shop. All rights reserved.
+                        © 2024 Kedai Kopi. Hak cipta dilindungi.
                     </div>
                     <div class="flex space-x-6 mt-4 md:mt-0">
-                        <a href="#" class="text-gray-500 hover:text-gray-900 text-sm">Privacy Policy</a>
-                        <a href="#" class="text-gray-500 hover:text-gray-900 text-sm">Terms of Service</a>
-                        <a href="#" class="text-gray-500 hover:text-gray-900 text-sm">Cookie Policy</a>
+                        <a href="#" class="text-gray-500 hover:text-gray-900 text-sm">Kebijakan Privasi</a>
+                        <a href="#" class="text-gray-500 hover:text-gray-900 text-sm">Syarat Layanan</a>
+                        <a href="#" class="text-gray-500 hover:text-gray-900 text-sm">Kebijakan Cookie</a>
                     </div>
                 </div>
             </div>
