@@ -22,7 +22,6 @@
             </div>
             <nav class="mt-4">
             <div class="px-4 py-2">
-                    <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-gray-700 hover:bg-brown-100 rounded">Dashboard</a>
                     <a href="{{ route('admin.menu') }}" class="block px-4 py-2 text-gray-700 hover:bg-brown-100 rounded">Menu Management</a>
                     <a href="{{ route('admin.order') }}" class="block px-4 py-2 text-gray-700 hover:bg-brown-100 rounded">Orders</a>
             

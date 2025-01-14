@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dashboard\DashboardadminController;
-use App\Http\Controllers\Auth\AdminAuthController;
+// use App\Http\Controllers\Auth\AdminAuthController;
 use App\Livewire\Admin\Adminidashboard;
 use App\Livewire\Admin\AdminMenumanagement;
 use App\Livewire\Admin\AdminOrders;
@@ -24,7 +24,7 @@ Route::middleware('guest:admin')->group(function () {
 
 // Admin protected routes
 Route::middleware('auth:admin')->group(function () {
-    Route::get('admin/dashboard', Adminidashboard::class)->name('admin.dashboard');
+    // Route::get('admin/dashboard', Adminidashboard::class)->name('admin.dashboard');
     Route::post('admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
     Route::get('admin/menu', AdminMenumanagement::class)->name('admin.menu');
     Route::get('admin/order', AdminOrders::class)->name('admin.order');

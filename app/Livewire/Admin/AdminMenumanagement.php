@@ -12,17 +12,14 @@ use Filament\Tables\Table;
 use Illuminate\Contracts\View\View;
 use App\Models\Category;
 use App\Models\Menu;
+use App\Models\OrderItem;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Toggle;
-use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\TimePicker;
-use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Components\Radio;
+use Carbon\Carbon;
+
 class AdminMenumanagement extends Component implements HasForms, HasTable
 {
     use InteractsWithTable;
@@ -58,6 +55,13 @@ class AdminMenumanagement extends Component implements HasForms, HasTable
                         return Category::create($data)->getKey();
                     })
                     ->options(Category::all()->pluck('name', 'id'))
+                    ->required(),
+                    Radio::make('featured')
+                    ->default(0)
+                    ->options([
+                        '1' => 'Active',
+                        '0' => 'Inactive',
+                    ])
                     ->required(),
                     FileUpload::make('image')
                     ->required()
@@ -96,6 +100,6 @@ class AdminMenumanagement extends Component implements HasForms, HasTable
     public function render() : View
     {
         return view('livewire.admin.admin-menumanagement')
-        ->layout('components.layouts.admin');
+            ->layout('components.layouts.admin');
     }
 }
