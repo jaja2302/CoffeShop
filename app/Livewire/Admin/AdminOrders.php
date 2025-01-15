@@ -19,6 +19,13 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Radio;
+use Filament\Tables\Filters\Filter;
+use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Actions\Action;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\OrdersExport;
+
 class AdminOrders extends Component implements HasTable,HasForms
 {
     use InteractsWithTable;
@@ -29,6 +36,12 @@ class AdminOrders extends Component implements HasTable,HasForms
     public $popularItems = [];
     public $startDate;
     public $endDate;
+    public $tableStartDate;
+    public $tableEndDate;
+    public $exportStartDate;
+    public $exportEndDate;
+
+    protected $updatesQueryString = ['startDate', 'endDate'];
 
     public function mount()
     {
@@ -73,12 +86,12 @@ class AdminOrders extends Component implements HasTable,HasForms
         $this->popularItems = array_slice($itemCounts, 0, 5, true);
     }
 
-    public function updatedStartDate()
+    public function updatedStartDate($value)
     {
         $this->loadStatistics();
     }
 
-    public function updatedEndDate()
+    public function updatedEndDate($value)
     {
         $this->loadStatistics();
     }
@@ -120,7 +133,6 @@ class AdminOrders extends Component implements HasTable,HasForms
                     $itemNames = array_map(function($item) {
                         return $item['name'];
                     }, $items);
-                    // dd(implode(', ', $itemNames));
                     return implode(',', $itemNames);
                 })
                 ->badge()
@@ -131,8 +143,94 @@ class AdminOrders extends Component implements HasTable,HasForms
                 })
                 ->label('Order Date'),
                 TextColumn::make('user.name'),
+            ])
+            ->filters([
+                Filter::make('created_at')
+                    ->form([
+                        DatePicker::make('from')
+                            ->label('From Date'),
+                        DatePicker::make('until')
+                            ->label('Until Date'),
+                    ])
+                    ->query(function ($query, array $data): mixed {
+                        $data['from'] ?? Carbon::today()->format('Y-m-d');
+                        $data['until'] ?? Carbon::today()->format('Y-m-d');
+                        
+                        return $query
+                            ->when(
+                                $data['from'],
+                                fn ($query) => $query->whereDate('created_at', '>=', $data['from'])
+                            )
+                            ->when(
+                                $data['until'],
+                                fn ($query) => $query->whereDate('created_at', '<=', $data['until'])
+                            );
+                    })
             ]);
     }
+
+    public function exportPdf()
+    {
+        $orders = OrderItem::whereBetween('created_at', [
+            Carbon::parse($this->startDate)->startOfDay(),
+            Carbon::parse($this->endDate)->endOfDay()
+        ])->get();
+
+        // Calculate summary
+        $totalRevenue = 0;
+        $itemStats = [];
+        foreach ($orders as $order) {
+            $items = json_decode($order->items, true);
+            foreach ($items as $item) {
+                $revenue = $item['price'] * $item['quantity'];
+                $totalRevenue += $revenue;
+
+                if (!isset($itemStats[$item['name']])) {
+                    $itemStats[$item['name']] = [
+                        'quantity' => 0,
+                        'revenue' => 0
+                    ];
+                }
+                $itemStats[$item['name']]['quantity'] += $item['quantity'];
+                $itemStats[$item['name']]['revenue'] += $revenue;
+            }
+        }
+
+        $days = Carbon::parse($this->startDate)->diffInDays(Carbon::parse($this->endDate)) + 1;
+        
+        $summary = [
+            'total_orders' => $orders->count(),
+            'total_revenue' => $totalRevenue,
+            'avg_orders_per_day' => $orders->count() / $days,
+            'popular_items' => collect($itemStats)->map(function ($stats, $name) {
+                return [
+                    'name' => $name,
+                    'quantity' => $stats['quantity'],
+                    'revenue' => $stats['revenue']
+                ];
+            })->sortByDesc('quantity')->take(5)
+        ];
+
+        $pdf = Pdf::loadView('exports.orders-pdf', [
+            'orders' => $orders,
+            'startDate' => $this->startDate,
+            'endDate' => $this->endDate,
+            'summary' => $summary
+        ]);
+        
+        return response()->streamDownload(function () use ($pdf) {
+            echo $pdf->output();
+        }, 'laporan-penjualan-' . $this->startDate . '-to-' . $this->endDate . '.pdf');
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(
+            new OrdersExport($this->startDate, $this->endDate),
+            'orders-' . $this->startDate . '-to-' . $this->endDate . '.xlsx'
+        );
+    }
+
     public function render()
     {
         return view('livewire.admin.admin-orders', [

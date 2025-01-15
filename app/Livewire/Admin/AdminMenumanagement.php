@@ -18,7 +18,11 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Radio;
+use Filament\Tables\Actions\BulkAction;
+use Filament\Tables\Actions\Action;
 use Carbon\Carbon;
+use Filament\Notifications\Notification;
+ 
 
 class AdminMenumanagement extends Component implements HasForms, HasTable
 {
@@ -90,7 +94,67 @@ class AdminMenumanagement extends Component implements HasForms, HasTable
                 // ...
             ])
             ->actions([
-                // ...
+                Action::make('edit')
+                    ->label('Edit Menu')
+                    ->form([
+                        TextInput::make('name')
+                            ->required()
+                            ->maxLength(255),
+                        TextInput::make('description')
+                            ->required()
+                            ->maxLength(255),
+                        TextInput::make('price')
+                            ->required()
+                            ->numeric(),
+                        Select::make('category_id')
+                            ->options(Category::all()->pluck('name', 'id'))
+                            ->required(),
+                        Radio::make('featured')
+                            ->default(0)
+                            ->options([
+                                '1' => 'Active',
+                                '0' => 'Inactive',
+                            ])
+                            ->required(),
+                        FileUpload::make('image')
+                            ->image()
+                            ->directory('menu-items'),
+                    ])
+                    ->fillForm(function (Menu $record): array {
+                        return [
+                            'name' => $record->name,
+                            'description' => $record->description,
+                            'price' => $record->price,
+                            'category_id' => $record->category_id,
+                            'featured' => $record->featured,
+                            'image' => $record->image,
+                        ];
+                    })
+                    ->successNotification(
+                        Notification::make()
+                             ->success()
+                             ->title('Updated')
+                             ->body('Menu berhasil diupdate'),
+                     )
+                    ->action(function (array $data, Menu $record): void {
+                        $record->update($data);
+                    }),
+                
+                Action::make('delete')
+                    ->label('Delete Menu')
+                    ->color('danger')
+                    ->requiresConfirmation()
+                    ->modalHeading('Delete Menu Item')
+                    ->modalDescription('Are you sure you want to delete this menu item? This action cannot be undone.')
+                    ->successNotification(
+                        Notification::make()
+                             ->success()
+                             ->title('Deleted')
+                             ->body('Menu berhasil didelete'),
+                     )
+                    ->action(function (Menu $record): void {
+                        $record->delete();
+                    })
             ])
             ->bulkActions([
                 // ...

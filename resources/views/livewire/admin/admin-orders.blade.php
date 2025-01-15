@@ -26,9 +26,25 @@
                 </button>
             </div>
             <div class="flex items-center gap-2">
-                <input type="date" wire:model="startDate" class="rounded-md border-gray-300">
+                <input type="date" wire:model.live="startDate" class="rounded-md border-gray-300">
                 <span class="text-gray-500">sampai</span>
-                <input type="date" wire:model="endDate" class="rounded-md border-gray-300">
+                <input type="date" wire:model.live="endDate" class="rounded-md border-gray-300">
+            </div>
+
+            <!-- Export Buttons -->
+            <div class="flex items-center gap-2 ml-auto">
+                <button wire:click="exportPdf" class="px-4 py-2 text-sm bg-red-500 text-white rounded-md hover:bg-red-600 flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Export PDF
+                </button>
+                <button wire:click="exportExcel" class="px-4 py-2 text-sm bg-green-500 text-white rounded-md hover:bg-green-600 flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Export Excel
+                </button>
             </div>
         </div>
     </div>
